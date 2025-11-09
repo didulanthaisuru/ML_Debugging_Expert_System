@@ -3,6 +3,11 @@ ML Debugging Expert System
 Core expert system with rules for diagnosing ML training issues
 """
 
+# Ensure backwards compatibility for older packages that reference
+# `collections.Mapping` on newer Python versions (Mapping moved to
+# `collections.abc`). The `compat` module provides aliases when
+# necessary and must be imported before importing `experta`.
+import compat  # noqa: F401 (module side-effects)
 from experta import *
 import json
 

@@ -6,6 +6,17 @@ Handles natural language queries and generates friendly explanations
 import google.generativeai as genai
 import re
 import json
+import os
+import sys
+import dotenv
+
+# Try to load environment variables from a .env file if python-dotenv is installed.
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    # If python-dotenv isn't installed, we'll rely on the environment variables.
+    pass
 
 class GeminiIntegration:
     """Integration with Gemini API for NL processing"""
@@ -13,7 +24,8 @@ class GeminiIntegration:
     def __init__(self, api_key):
         """Initialize Gemini API"""
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        # Use gemini-2.5-flash (fast and efficient for general tasks)
+        self.model = genai.GenerativeModel('models/gemini-2.5-flash')
     
     def extract_metrics(self, user_query):
         """
@@ -139,9 +151,19 @@ Keep your response brief and friendly.
 
 # Example usage
 if __name__ == "__main__":
-    # NOTE: Replace with your actual Gemini API key
-    API_KEY = "YOUR_GEMINI_API_KEY_HERE"
-    
+    # Load API key from environment (.env or system environment).
+    # Check common variable names and fail fast with a helpful message.
+    API_KEY = (
+        os.getenv("GEMINI_API_KEY")
+        or os.getenv("GOOGLE_API_KEY")
+        or os.getenv("API_KEY")
+    )
+
+    if not API_KEY:
+        raise RuntimeError(
+            "Gemini API key not found. Set GEMINI_API_KEY (or GOOGLE_API_KEY / API_KEY) in the environment or in a .env file."
+        )
+
     gemini = GeminiIntegration(API_KEY)
     
     # Test metric extraction

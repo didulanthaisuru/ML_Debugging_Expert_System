@@ -4,6 +4,7 @@ Interactive command-line interface for the hybrid expert system
 """
 
 import sys
+
 from ml_debugging_expert import run_diagnosis
 from gemini_integration import GeminiIntegration
 import json
@@ -195,8 +196,26 @@ class MLDebugCLI:
 
 
 if __name__ == "__main__":
-    print("\n🔑 Enter your Gemini API key:")
-    api_key = input("API Key: ").strip()
+    import os
+    from dotenv import load_dotenv
+    
+    # Load environment variables from .env file
+    load_dotenv()
+    
+    # Try to get API key from environment first
+    api_key = (
+        os.getenv("GEMINI_API_KEY")
+        or os.getenv("GOOGLE_API_KEY")
+        or os.getenv("API_KEY")
+    )
+    
+    # If no API key in environment, prompt user
+    if not api_key:
+        print("\n🔑 Enter your Gemini API key:")
+        print("(Or set GEMINI_API_KEY in .env file)")
+        api_key = input("API Key: ").strip()
+    else:
+        print(f"\n✅ Using API key from .env file")
     
     if not api_key:
         print("❌ API key required. Get one from: https://makersuite.google.com/app/apikey")
