@@ -92,13 +92,24 @@ class MLDebugGUI:
         )
         subtitle_label.pack(pady=(0, 20))
         
-        # Main container
-        main_frame = tk.Frame(self.root, bg=self.colors['light'])
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=25, pady=25)
+        # Main container with two columns
+        main_container = tk.Frame(self.root, bg=self.colors['light'])
+        main_container.pack(fill=tk.BOTH, expand=True, padx=25, pady=25)
+        
+        # LEFT SIDE - Input Panel
+        left_panel = tk.Frame(main_container, bg=self.colors['light'])
+        left_panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=(0, 10))
+        left_panel.config(width=500)
+        
+        # RIGHT SIDE - Output Panel
+        right_panel = tk.Frame(main_container, bg=self.colors['light'])
+        right_panel.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(10, 0))
+        
+        # === LEFT PANEL CONTENT ===
         
         # API Connection Frame - Clean card design
         api_frame = tk.LabelFrame(
-            main_frame,
+            left_panel,
             text=" 🔑 Gemini API Connection ",
             font=("Helvetica", 12, "bold"),
             bg="white",
@@ -152,7 +163,7 @@ class MLDebugGUI:
         
         # Mode Selection - Modern card style
         mode_frame = tk.LabelFrame(
-            main_frame,
+            left_panel,
             text="📋 Select Input Mode",
             font=("Helvetica", 12, "bold"),
             bg="white",
@@ -194,7 +205,7 @@ class MLDebugGUI:
         
         # Input Frame (switchable) - Modern card style
         self.input_frame = tk.LabelFrame(
-            main_frame,
+            left_panel,
             text="📝 Input",
             font=("Helvetica", 12, "bold"),
             bg="white",
@@ -305,7 +316,7 @@ class MLDebugGUI:
         
         # Diagnose Button - Large, modern, attention-grabbing
         self.diagnose_btn = tk.Button(
-            main_frame,
+            left_panel,
             text="🔍 Diagnose Issue",
             command=self.diagnose,
             bg=self.colors['primary'],
@@ -317,11 +328,13 @@ class MLDebugGUI:
             borderwidth=0,
             state=tk.DISABLED
         )
-        self.diagnose_btn.pack(fill=tk.X, pady=(0, 20))
+        self.diagnose_btn.pack(fill=tk.X, pady=(0, 0))
         
-        # Output Frame - Modern card style
+        # === RIGHT PANEL CONTENT ===
+        
+        # Output Frame - Modern card style (takes full right panel)
         output_frame = tk.LabelFrame(
-            main_frame,
+            right_panel,
             text="💡 Diagnosis & Recommendations",
             font=("Helvetica", 12, "bold"),
             bg="white",
